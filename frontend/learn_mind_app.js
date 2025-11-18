@@ -201,3 +201,78 @@
             alert('Login successful! Welcome back, Alex!');
             hideLogin();
         }
+
+        /* --- CHATBOT LOGIC --- */
+
+let chatbotOpen = true;
+
+// Toggle chatbot open/close
+function toggleChatbot() {
+    const body = document.getElementById("chatbot-body");
+    const btn = document.getElementById("chatbot-toggle-btn");
+
+    chatbotOpen = !chatbotOpen;
+    body.style.display = chatbotOpen ? "block" : "none";
+    btn.textContent = chatbotOpen ? "−" : "+";
+}
+
+// Send message
+function sendChatMessage() {
+    const input = document.getElementById("chatbot-input");
+    const text = input.value.trim();
+
+    if (text === "") return;
+
+    addChatMessage(text, "user-msg");
+    input.value = "";
+
+    setTimeout(() => {
+        botReply(text);
+    }, 500);
+}
+
+// Detect enter key
+function handleChatInput(e) {
+    if (e.key === "Enter") sendChatMessage();
+}
+
+// Add message to chat window
+function addChatMessage(message, type) {
+    const msgBox = document.getElementById("chatbot-messages");
+    const div = document.createElement("div");
+
+    div.className = `chat-msg ${type}`;
+    div.textContent = message;
+
+    msgBox.appendChild(div);
+    msgBox.scrollTop = msgBox.scrollHeight;
+}
+
+// Simple AI-like responses
+function botReply(userText) {
+    let reply = "";
+
+    userText = userText.toLowerCase();
+
+    // Basic responses
+    if (userText.includes("hello") || userText.includes("hi")) {
+        reply = "Hello! How can I help you today?";
+    }
+    else if (userText.includes("study")) {
+        reply = "Try studying in 25–30 minute sessions with short breaks. It helps improve focus!";
+    }
+    else if (userText.includes("stress") || userText.includes("sad")) {
+        reply = "I'm here for you ❤️ Try taking a deep breath. Want a relaxation exercise?";
+    }
+    else if (userText.includes("wellbeing")) {
+        reply = "You can update your wellbeing check in the Wellbeing section.";
+    }
+    else if (userText.includes("report")) {
+        reply = "Reports are available in Daily, Weekly, and Wellbeing categories.";
+    }
+    else {
+        reply = "That's interesting! Could you tell me more?";
+    }
+
+    addChatMessage(reply, "bot-msg");
+}
